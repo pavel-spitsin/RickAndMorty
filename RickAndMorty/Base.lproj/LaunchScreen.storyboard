@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="EHf-IW-A2E">
+            <objects>
+                <viewController id="01J-lp-oVM" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Launchscreen background" translatesAutoresizingMaskIntoConstraints="NO" id="BJI-60-OiU">
+                                <rect key="frame" x="16" y="113" width="361" height="735"/>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Launchscreen logo" translatesAutoresizingMaskIntoConstraints="NO" id="mv7-Qk-1dz">
+                                <rect key="frame" x="126.66666666666669" y="167" width="140" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="7JU-dy-Bnd"/>
+                                    <constraint firstAttribute="width" constant="140" id="kaX-Oc-fuO"/>
+                                </constraints>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Portal" translatesAutoresizingMaskIntoConstraints="NO" id="i74-lD-0E7">
+                                <rect key="frame" x="126.66666666666669" y="243" width="140" height="228"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="228" id="5dA-2p-KbD"/>
+                                    <constraint firstAttribute="width" constant="140" id="Xfg-va-O5k"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="140" id="Xo1-hf-E8R"/>
+                                    <constraint firstAttribute="height" constant="228" id="mz6-lM-04H"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" name="Black BG"/>
+                        <constraints>
+                            <constraint firstItem="i74-lD-0E7" firstAttribute="centerX" secondItem="BJI-60-OiU" secondAttribute="centerX" id="3VU-fc-Wqs"/>
+                            <constraint firstAttribute="trailing" secondItem="BJI-60-OiU" secondAttribute="trailing" constant="16" id="5KI-97-CJ0"/>
+                            <constraint firstItem="BJI-60-OiU" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" constant="16" id="NXl-X1-zLM"/>
+                            <constraint firstItem="mv7-Qk-1dz" firstAttribute="top" secondItem="BJI-60-OiU" secondAttribute="top" constant="54" id="U3N-ZO-KtR"/>
+                            <constraint firstItem="mv7-Qk-1dz" firstAttribute="centerX" secondItem="BJI-60-OiU" secondAttribute="centerX" id="dQI-EL-D1J"/>
+                            <constraint firstItem="i74-lD-0E7" firstAttribute="top" secondItem="mv7-Qk-1dz" secondAttribute="bottom" constant="36" id="hPS-jC-z0E"/>
+                            <constraint firstItem="BJI-60-OiU" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="54" id="mQn-cI-NmK"/>
+                            <constraint firstItem="BJI-60-OiU" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" constant="30" id="uN6-QB-eRa"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="53" y="375"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="Launchscreen background" width="334" height="650"/>
+        <image name="Launchscreen logo" width="140" height="40"/>
+        <image name="Portal" width="140" height="228"/>
+        <namedColor name="Black BG">
+            <color red="0.016000000759959221" green="0.046999998390674591" blue="0.11800000071525574" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>
