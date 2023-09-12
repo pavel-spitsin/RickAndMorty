@@ -26,6 +26,23 @@ class MainScreenView: BaseViewController {
         collectionView.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: MainCollectionViewFlowLayoutСonstants.scrollIndicatorInsetRight)
         return collectionView
     }()
+    private lazy var searchBarButtonItem: UIBarButtonItem = {
+        let item = UIBarButtonItem(image: .init(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(showSearchBar))
+        item.tintColor = CustomColor.grayNormal
+        return item
+    }()
+    private lazy var searchBarView: UISearchBar = {
+        let searchBar = UISearchBar()
+        searchBar.backgroundColor = .clear
+        searchBar.searchTextField.backgroundColor = CustomColor.blackCard
+        searchBar.searchTextField.tintColor = CustomColor.grayNormal
+        searchBar.searchTextField.textColor = CustomColor.grayNormal
+        searchBar.setImage(UIImage(), for: .search, state: .normal)
+        searchBar.setImage(UIImage(systemName: "xmark.circle.fill"), for: .clear, state: .normal)
+        searchBar.showsCancelButton = true
+        searchBar.delegate = self
+        return searchBar
+    }()
     
     //MARK: - Init
     
@@ -43,7 +60,7 @@ class MainScreenView: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupLayout()
+        configureComponents()
         setupBindings()
     }
     
@@ -58,6 +75,11 @@ class MainScreenView: BaseViewController {
     }
     
     // MARK: - Layout
+    
+    private func configureComponents() {
+        navigationItem.rightBarButtonItem = searchBarButtonItem
+        setupLayout()
+    }
 
     private func setupLayout() {
         view.addSubview(collectionView)
@@ -82,20 +104,30 @@ class MainScreenView: BaseViewController {
             }
             .store(in: &cancelBag)
     }
+    
+    // MARK: - Actions
+    
+    @objc func showSearchBar() {
+        UIView.animate(withDuration: 0.3) {
+            self.navigationItem.titleView = self.searchBarView
+        } completion: { _ in
+            self.searchBarView.becomeFirstResponder()
+        }
+    }
 }
 
 //MARK: - UICollectionViewDataSource
 
 extension MainScreenView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        viewModel.infoModel?.count ?? 20
+        viewModel.charactersToShow.count == 0 ? 20 : viewModel.charactersToShow.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainScreenCollectionCell.identifier,
                                                             for: indexPath) as? MainScreenCollectionCell else { return UICollectionViewCell() }
-        if (0..<viewModel.charactersArray.count).contains(indexPath.row) {
-            cell.fillInfoForCharacter(viewModel.charactersArray[indexPath.row])
+        if (0..<viewModel.charactersToShow.count).contains(indexPath.row) {
+            cell.fillInfoForCharacter(viewModel.charactersToShow[indexPath.row])
         }
         return cell
     }
@@ -105,7 +137,7 @@ extension MainScreenView: UICollectionViewDataSource {
 
 extension MainScreenView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        navigationController?.pushViewController(DetailsScreenView(viewModel: DetailsScreenViewModel(character: viewModel.charactersArray[indexPath.row])), animated: true)
+        navigationController?.pushViewController(DetailsScreenView(viewModel: DetailsScreenViewModel(character: viewModel.charactersToShow[indexPath.row])), animated: true)
     }
 }
 
@@ -131,5 +163,25 @@ extension MainScreenView: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return MainCollectionViewFlowLayoutСonstants.minimumLineSpacing
+    }
+}
+
+//MARK: - UISearchBarDelegate
+
+extension MainScreenView: UISearchBarDelegate {
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        UIView.animate(withDuration: 0.3) {
+            self.searchBarView.searchTextField.text = ""
+            self.navigationItem.titleView = nil
+        } completion: { _ in
+            self.searchBarView.resignFirstResponder()
+        }
+        
+        viewModel.updateFilterWord(with: nil)
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        viewModel.updateFilterWord(with: searchBar.text)
+        searchBarView.resignFirstResponder()
     }
 }

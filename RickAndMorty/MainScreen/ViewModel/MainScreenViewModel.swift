@@ -14,8 +14,9 @@ final class MainScreenViewModel: ObservableObject {
     //MARK: - Properties
     
     private var cancelBag = Set<AnyCancellable>()
-    private(set) var charactersArray = [CharacterModel]()
-    
+    private(set) var charactersToShow = [CharacterModel]()
+    @Published private var charactersArray = [CharacterModel]()
+    @Published private var filterWord: String? = nil
     @Published var infoModel: InfoModel?
     //Subscribe in view
     @Published var notyfier = true
@@ -42,6 +43,34 @@ final class MainScreenViewModel: ObservableObject {
                     }
                     semaphore.wait()
                 }
+            }
+            .store(in: &cancelBag)
+        
+        $charactersArray
+            .receive(on: DispatchQueue.global(qos: .background))
+            .sink { _ in
+                if self.filterWord == nil {
+                    self.charactersToShow = self.charactersArray
+                } else {
+                    self.charactersToShow = self.charactersArray.filter({
+                        $0.name.lowercased().contains(self.filterWord!.lowercased())
+                    })
+                }
+            }
+            .store(in: &cancelBag)
+        
+        $filterWord
+            .receive(on: DispatchQueue.global(qos: .background))
+            .sink { _ in
+                if self.filterWord == nil {
+                    self.charactersToShow = self.charactersArray
+                } else {
+                    self.charactersToShow = self.charactersArray.filter({
+                        $0.name.lowercased().contains(self.filterWord!.lowercased())
+                    })
+                }
+                
+                self.notyfier.toggle()
             }
             .store(in: &cancelBag)
     }
@@ -77,5 +106,9 @@ final class MainScreenViewModel: ObservableObject {
         group.notify(queue: .main) {
             self.notyfier.toggle()
         }
+    }
+    
+    func updateFilterWord(with text: String?) {
+        filterWord = text
     }
 }
