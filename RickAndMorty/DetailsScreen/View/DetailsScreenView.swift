@@ -94,6 +94,14 @@ class DetailsScreenView: BaseViewController {
                 self.updateViews()
             }
             .store(in: &cancelBag)
+        
+        viewModel.$errorCode
+            .receive(on: DispatchQueue.main)
+            .sink {
+                guard let errorCode = $0 else { return }
+                self.showErrorAlert(with: errorCode)
+            }
+            .store(in: &cancelBag)
     }
     
     //MARK: - Actions
@@ -102,6 +110,16 @@ class DetailsScreenView: BaseViewController {
         tableView.reloadData()
         tableView.isHidden = false
         activityIndicator.stopAnimating()
+    }
+    
+    private func showErrorAlert(with errorCode: Int) {
+        let alert = UIAlertController(title: "Error", message: "Error code: \(errorCode)", preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "Ok", style: .cancel)
+        alert.addAction(cancelAction)
+        
+        UIView.animate(withDuration: 0.3) {
+            self.present(alert, animated: true, completion: nil)
+        }
     }
 }
 

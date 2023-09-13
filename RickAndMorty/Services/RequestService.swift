@@ -11,9 +11,17 @@ struct RequestService {
     
     //MARK: - Actions
 
-    static public func getDataByURL(urlString: String, completionBlock: @escaping ([String : AnyObject]?) -> Void) {
+    static public func getDataByURL(urlString: String,
+                                    completionBlock: @escaping ([String : AnyObject]?) -> Void,
+                                    errorCompletion: @escaping (Int) -> Void) {
         guard let url = URL(string: urlString) else { return }
         let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
+            if error != nil {
+                guard let error = error as NSError? else { return }
+                errorCompletion(error.code)
+                return
+            }
+            
             guard let data else {
                 completionBlock(nil)
                 return
