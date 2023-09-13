@@ -30,11 +30,11 @@ class MainScreenCollectionCell: UICollectionViewCell {
         label.adjustsFontSizeToFitWidth = true
         return label
     }()
-    private lazy var activityIndicator: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(style: .large)
-        indicator.hidesWhenStopped = true
-        indicator.color = CustomColor.white
-        return indicator
+    private lazy var characterImageViewGradientLoader: GradientLoader  = {
+        GradientLoader(superview: characterImageView)
+    }()
+    private lazy var characterNameLabelGradientLoader: GradientLoader  = {
+        GradientLoader(superview: characterNameLabel)
     }()
     
     // MARK: - Lifecycle
@@ -56,7 +56,11 @@ class MainScreenCollectionCell: UICollectionViewCell {
         isUserInteractionEnabled = false
         characterNameLabel.text = ""
         characterImageView.image = nil
-        activityIndicator.startAnimating()
+        characterImageViewGradientLoader.startGradientAnimation(firstColor: CustomColor.grayNormal?.cgColor,
+                                                                secondColor: CustomColor.white?.cgColor)
+        
+        characterNameLabelGradientLoader.startGradientAnimation(firstColor: CustomColor.grayNormal?.cgColor,
+                                                                secondColor: CustomColor.white?.cgColor)
     }
 
     // MARK: - Layout
@@ -69,11 +73,9 @@ class MainScreenCollectionCell: UICollectionViewCell {
     private func setupLayout() {
         characterImageView.translatesAutoresizingMaskIntoConstraints = false
         characterNameLabel.translatesAutoresizingMaskIntoConstraints = false
-        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         
         contentView.addSubview(characterImageView)
         contentView.addSubview(characterNameLabel)
-        contentView.addSubview(activityIndicator)
 
         NSLayoutConstraint.activate([
             characterImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
@@ -86,11 +88,6 @@ class MainScreenCollectionCell: UICollectionViewCell {
             characterNameLabel.trailingAnchor.constraint(equalTo: characterImageView.trailingAnchor),
             characterNameLabel.heightAnchor.constraint(equalToConstant: 22),
             characterNameLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
-            
-            activityIndicator.topAnchor.constraint(equalTo: contentView.topAnchor),
-            activityIndicator.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            activityIndicator.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            activityIndicator.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
         ])
     }
     
@@ -99,8 +96,9 @@ class MainScreenCollectionCell: UICollectionViewCell {
     func fillInfoForCharacter(_ character: CharacterModel) {
         characterNameLabel.text = character.name
         characterImageView.image = character.image
+        characterNameLabelGradientLoader.stopGradientAnimation()
         guard characterImageView.image != nil else { return }
-        activityIndicator.stopAnimating()
+        characterImageViewGradientLoader.stopGradientAnimation()
         isUserInteractionEnabled = true
     }
 }
