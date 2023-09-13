@@ -17,15 +17,18 @@ final class MainScreenViewModel: ObservableObject {
     private(set) var charactersToShow = [CharacterModel]()
     @Published private var charactersArray = [CharacterModel]()
     @Published private var filterWord: String? = nil
-    @Published var infoModel: InfoModel?
+    @Published private var infoModel: InfoModel?
     //Subscribe in view
     @Published var notyfier = true
+    @Published var errorCode: Int? = nil
     
     //MARK: - Init
     
     init() {
         setupBindings()
-        RequestService.getDataByURL(urlString: urlForPage(0), completionBlock: prepareInfoData(data:))
+        RequestService.getDataByURL(urlString: urlForPage(0), completionBlock: prepareInfoData(data:)) { errorCode in
+            self.errorCode = errorCode
+        }
     }
     
     //MARK: - Bindings
@@ -40,6 +43,8 @@ final class MainScreenViewModel: ObservableObject {
                     RequestService.getDataByURL(urlString: self.urlForPage($0)) { data in
                         semaphore.signal()
                         self.prepareCharacterData(data: data)
+                    } errorCompletion: { errorCode in
+                        self.errorCode = errorCode
                     }
                     semaphore.wait()
                 }

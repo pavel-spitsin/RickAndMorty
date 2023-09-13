@@ -103,15 +103,33 @@ class MainScreenView: BaseViewController {
                 self.collectionView.reloadData()
             }
             .store(in: &cancelBag)
+        
+        viewModel.$errorCode
+            .receive(on: DispatchQueue.main)
+            .sink {
+                guard let errorCode = $0 else { return }
+                self.showErrorAlert(with: errorCode)
+            }
+            .store(in: &cancelBag)
     }
     
     // MARK: - Actions
     
-    @objc func showSearchBar() {
+    @objc private func showSearchBar() {
         UIView.animate(withDuration: 0.3) {
             self.navigationItem.titleView = self.searchBarView
         } completion: { _ in
             self.searchBarView.becomeFirstResponder()
+        }
+    }
+    
+    private func showErrorAlert(with errorCode: Int) {
+        let alert = UIAlertController(title: "Error", message: "Error code: \(errorCode)", preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "Ok", style: .cancel)
+        alert.addAction(cancelAction)
+        
+        UIView.animate(withDuration: 0.3) {
+            self.present(alert, animated: true, completion: nil)
         }
     }
 }

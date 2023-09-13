@@ -17,6 +17,7 @@ final class DetailsScreenViewModel: ObservableObject {
 
     //Subscribe in view
     @Published var characterDetailsModel: CharacterDetailsModel?
+    @Published var errorCode: Int? = nil
     
     //MARK: - Init
     
@@ -40,6 +41,8 @@ final class DetailsScreenViewModel: ObservableObject {
             guard let data else { return }
             location = LocationModel(data: data)
             group.leave()
+        } errorCompletion: { errorCode in
+            self.errorCode = errorCode
         }
 
         character.episodesURLs.forEach {
@@ -49,6 +52,8 @@ final class DetailsScreenViewModel: ObservableObject {
                 let episode = EpisodeModel(data: data)
                 episodes.append(episode)
                 group.leave()
+            } errorCompletion: { errorCode in
+                self.errorCode = errorCode
             }
         }
 
