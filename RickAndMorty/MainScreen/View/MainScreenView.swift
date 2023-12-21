@@ -8,6 +8,10 @@
 import UIKit
 import Combine
 
+extension Notification.Name {
+    static let ErrorNotification = NSNotification.Name("ErrorNotification")
+}
+
 class MainScreenView: BaseViewController {
     
     //MARK: - Properties
@@ -60,6 +64,7 @@ class MainScreenView: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(showErrorAlert(with:)), name: .ErrorNotification, object: nil)
         configureComponents()
         setupBindings()
     }
@@ -97,13 +102,22 @@ class MainScreenView: BaseViewController {
     //MARK: - Bindings
     
     private func setupBindings() {
-        viewModel.$notyfier
+        viewModel.$infoModel
             .receive(on: DispatchQueue.main)
             .sink { _ in
                 self.collectionView.reloadData()
             }
             .store(in: &cancelBag)
         
+        
+        viewModel.$notyfier
+            .receive(on: DispatchQueue.main)
+            .sink { _ in
+                guard self.searchBarView.text != nil else { return }
+                self.collectionView.reloadData()
+            }
+            .store(in: &cancelBag)
+
         viewModel.$errorCode
             .receive(on: DispatchQueue.main)
             .sink {
@@ -123,7 +137,7 @@ class MainScreenView: BaseViewController {
         }
     }
     
-    private func showErrorAlert(with errorCode: Int) {
+    @objc private func showErrorAlert(with errorCode: Int) {
         let alert = UIAlertController(title: "Error", message: "Error code: \(errorCode)", preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "Ok", style: .cancel)
         alert.addAction(cancelAction)
@@ -138,15 +152,23 @@ class MainScreenView: BaseViewController {
 
 extension MainScreenView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        viewModel.charactersToShow.count == 0 ? 20 : viewModel.charactersToShow.count
+        if searchBarView.text == "" {
+            return viewModel.infoModel?.count ?? 826 //826 expected
+        } else {
+            return viewModel.charactersToShow.count
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainScreenCollectionCell.identifier,
                                                             for: indexPath) as? MainScreenCollectionCell else { return UICollectionViewCell() }
-        if (0..<viewModel.charactersToShow.count).contains(indexPath.row) {
-            cell.fillInfoForCharacter(viewModel.charactersToShow[indexPath.row])
+        
+        if searchBarView.text == "" {
+            cell.cellViewModel.updateID(id: indexPath.row + 1)
+        } else {
+            cell.cellViewModel.model = viewModel.charactersToShow[indexPath.row]
         }
+        
         return cell
     }
 }
@@ -155,7 +177,9 @@ extension MainScreenView: UICollectionViewDataSource {
 
 extension MainScreenView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        navigationController?.pushViewController(DetailsScreenView(viewModel: DetailsScreenViewModel(character: viewModel.charactersToShow[indexPath.row])), animated: true)
+        let cell = collectionView.cellForItem(at: indexPath) as! MainScreenCollectionCell
+        guard let characterModel = cell.cellViewModel.model else { return }
+        navigationController?.pushViewController(DetailsScreenView(viewModel: DetailsScreenViewModel(character: characterModel)), animated: true)
     }
 }
 
@@ -194,7 +218,6 @@ extension MainScreenView: UISearchBarDelegate {
         } completion: { _ in
             self.searchBarView.resignFirstResponder()
         }
-        
         viewModel.updateFilterWord(with: nil)
     }
     

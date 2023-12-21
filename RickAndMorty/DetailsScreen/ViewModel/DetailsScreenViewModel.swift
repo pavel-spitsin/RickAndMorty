@@ -14,7 +14,6 @@ final class DetailsScreenViewModel: ObservableObject {
     //MARK: - Properties
     
     private let character: CharacterModel
-
     //Subscribe in view
     @Published var characterDetailsModel: CharacterDetailsModel?
     @Published var errorCode: Int? = nil
@@ -37,7 +36,8 @@ final class DetailsScreenViewModel: ObservableObject {
         
         group.enter()
         guard let locationURL else { return }
-        RequestService.getDataByURL(urlString: locationURL) { data in
+        
+        RequestService().loadData(urlString: locationURL) { data in
             guard let data else { return }
             location = LocationModel(data: data)
             group.leave()
@@ -47,7 +47,7 @@ final class DetailsScreenViewModel: ObservableObject {
 
         character.episodesURLs.forEach {
             group.enter()
-            RequestService.getDataByURL(urlString: $0) { data in
+            RequestService().loadData(urlString: $0) { data in
                 guard let data else { return }
                 let episode = EpisodeModel(data: data)
                 episodes.append(episode)

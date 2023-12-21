@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import CoreData
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -13,6 +14,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     //MARK: - Properties
     
     var window: UIWindow?
+    
+    lazy var persistentContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: "CoreData")
+        container.loadPersistentStores { description, error in
+            if let error {
+                print(error.localizedDescription)
+            } else {
+                print("DB url -", description.url?.absoluteString ?? "")
+            }
+        }
+        return container
+    }()
     
     //MARK: - App Life Cycle
 
@@ -22,5 +35,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = BaseNavigationController(rootViewController: MainScreenView(viewModel: MainScreenViewModel()))
         window?.makeKeyAndVisible()
         return true
+    }
+    
+    //MARK: - Actions
+    
+    func saveContext() {
+        let context = persistentContainer.viewContext
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+                fatalError(error.localizedDescription)
+            }
+        }
     }
 }

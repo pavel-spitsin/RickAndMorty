@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 class MainScreenCollectionCell: UICollectionViewCell {
 
@@ -13,6 +14,9 @@ class MainScreenCollectionCell: UICollectionViewCell {
     
     static let identifier = String(describing: MainScreenCollectionCell.self)
 
+    private var cancelBag = Set<AnyCancellable>()
+    @Published var cellViewModel = MainScreenCollectionCellViewModel()
+    
     private lazy var characterImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = .clear
@@ -45,6 +49,7 @@ class MainScreenCollectionCell: UICollectionViewCell {
         contentView.backgroundColor = CustomColor.blackCard
         contentView.layer.cornerRadius = 16
         configureComponents()
+        setupBindings()
     }
     
     required init?(coder: NSCoder) {
@@ -53,12 +58,12 @@ class MainScreenCollectionCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        cellViewModel.stopRequest()
         isUserInteractionEnabled = false
         characterNameLabel.text = ""
         characterImageView.image = nil
         characterImageViewGradientLoader.startGradientAnimation(firstColor: CustomColor.grayNormal?.cgColor,
                                                                 secondColor: CustomColor.white?.cgColor)
-        
         characterNameLabelGradientLoader.startGradientAnimation(firstColor: CustomColor.grayNormal?.cgColor,
                                                                 secondColor: CustomColor.white?.cgColor)
     }
@@ -91,13 +96,24 @@ class MainScreenCollectionCell: UICollectionViewCell {
         ])
     }
     
+    //MARK: - Bindings
+
+    private func setupBindings() {
+        cellViewModel.$model
+            .receive(on: DispatchQueue.main)
+            .sink {
+                guard let character = $0 else { return }
+                self.fillInfoForCharacter(character)
+            }
+            .store(in: &cancelBag)
+    }
+    
     // MARK: - Actions
     
     func fillInfoForCharacter(_ character: CharacterModel) {
         characterNameLabel.text = character.name
         characterImageView.image = character.image
         characterNameLabelGradientLoader.stopGradientAnimation()
-        guard characterImageView.image != nil else { return }
         characterImageViewGradientLoader.stopGradientAnimation()
         isUserInteractionEnabled = true
     }
