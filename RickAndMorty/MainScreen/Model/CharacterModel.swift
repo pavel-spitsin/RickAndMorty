@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct CharacterModel: Hashable {
+public struct CharacterModel {
     var id: Int
     var name: String
     var status: String
@@ -36,5 +36,22 @@ struct CharacterModel: Hashable {
         self.episodesURLs = dataResult["episode"] as! [String]
         self.url = dataResult["url"] as! String
         self.created = dataResult["created"] as! String
+    }
+    
+    init(from coreDataModel: CoreDataCharacterModel) {
+        self.id = Int(coreDataModel.id)
+        self.name = coreDataModel.name
+        self.status = coreDataModel.status
+        self.species = coreDataModel.species
+        self.type = coreDataModel.type
+        self.gender = coreDataModel.gender
+        self.origin = try! NSKeyedUnarchiver.unarchivedObject(ofClass: NSDictionary.self, from: coreDataModel.origin!) as! [String : String]
+        self.location = try! NSKeyedUnarchiver.unarchivedObject(ofClass: NSDictionary.self, from: coreDataModel.location!) as! [String : String]
+        self.episodesURLs = try! NSKeyedUnarchiver.unarchivedObject(ofClass: NSArray.self, from: coreDataModel.episodesURLs!) as! [String]
+        self.imageURL = coreDataModel.imageURL
+        self.url = coreDataModel.url
+        self.created = coreDataModel.created
+        guard let imageData = coreDataModel.image else { return }
+        self.image = UIImage(data: imageData)
     }
 }

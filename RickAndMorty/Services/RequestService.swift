@@ -7,15 +7,20 @@
 
 import UIKit
 
-struct RequestService {
+final class RequestService {
+    
+    //MARK: - Properties
+    
+    var dataTask: URLSessionDataTask?
     
     //MARK: - Actions
 
-    static public func getDataByURL(urlString: String,
-                                    completionBlock: @escaping ([String : AnyObject]?) -> Void,
-                                    errorCompletion: @escaping (Int) -> Void) {
+    public func loadData(urlString: String,
+                         completionBlock: @escaping ([String : AnyObject]?) -> Void,
+                         errorCompletion: @escaping (Int) -> Void) {
         guard let url = URL(string: urlString) else { return }
-        let task = URLSession.shared.dataTask(with: url) {(data, response, error) in
+        dataTask?.cancel()
+        dataTask = URLSession.shared.dataTask(with: url, completionHandler: { data, response, error in
             if error != nil {
                 guard let error = error as NSError? else { return }
                 errorCompletion(error.code)
@@ -26,31 +31,36 @@ struct RequestService {
                 completionBlock(nil)
                 return
             }
-            let dataDictionary = RequestService.convertStringToDictionary(text: String(data: data, encoding: .utf8)!)
+            
+            let dataDictionary = self.convertStringToDictionary(text: String(data: data, encoding: .utf8)!)
             completionBlock(dataDictionary)
-        }
-        task.resume()
-    }
-    
-    static public func getImage(imageURL: String, completionBlock: @escaping (UIImage) -> Void){
-        let url = URL(string: imageURL)
-        DispatchQueue.global(qos: .background).sync {
-            let data = try? Data(contentsOf: url!)
-            guard let data else { return }
-            guard let image = UIImage(data: data) else { return }
-            completionBlock(image)
-        }
+        })
+        dataTask?.resume()
     }
 
-    static private func convertStringToDictionary(text: String) -> [String:AnyObject]? {
-       if let data = text.data(using: .utf8) {
-           do {
-               let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String:AnyObject]
-               return json
-           } catch {
-               print("Something went wrong")
-           }
-       }
-       return nil
-   }
+    public func loadImage(imageURL: String,
+                          completionBlock: @escaping (UIImage) -> Void) {
+        guard let url = URL(string: imageURL) else { return }
+        dataTask?.cancel()
+        dataTask = URLSession.shared.dataTask(with: url, completionHandler: { data, response, error in
+            guard let data, let image = UIImage(data: data) else {
+                print("Couldn't load image")
+                return
+            }
+            completionBlock(image)
+        })
+        dataTask?.resume()
+    }
+
+   private func convertStringToDictionary(text: String) -> [String:AnyObject]? {
+        if let data = text.data(using: .utf8) {
+            do {
+                let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String:AnyObject]
+                return json
+            } catch {
+                print("Something went wrong")
+            }
+        }
+        return nil
+    }
 }
