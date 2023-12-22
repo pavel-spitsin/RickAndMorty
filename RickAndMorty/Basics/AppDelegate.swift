@@ -14,6 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     //MARK: - Properties
     
     var window: UIWindow?
+    var appCoordinator: AppCoordinator?
     
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "CoreData")
@@ -32,8 +33,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         Thread.sleep(forTimeInterval: 1.0) //Just to show LaunchScreen for 1 second
         self.window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = BaseNavigationController(rootViewController: MainScreenView(viewModel: MainScreenViewModel()))
-        window?.makeKeyAndVisible()
+        if let window {
+            appCoordinator = AppCoordinator(window: window)
+            appCoordinator?.start()
+        }
         return true
     }
     

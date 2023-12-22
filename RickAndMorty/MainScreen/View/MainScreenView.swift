@@ -16,6 +16,7 @@ class MainScreenView: BaseViewController {
     
     //MARK: - Properties
     
+    weak var coordinator: MainScreenCoordinator?
     private var viewModel: MainScreenViewModel
     private var cancelBag = Set<AnyCancellable>()
     
@@ -179,7 +180,7 @@ extension MainScreenView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath) as! MainScreenCollectionCell
         guard let characterModel = cell.cellViewModel.model else { return }
-        navigationController?.pushViewController(DetailsScreenView(viewModel: DetailsScreenViewModel(character: characterModel)), animated: true)
+        coordinator?.runDetailsScreen(with: characterModel)
     }
 }
 
