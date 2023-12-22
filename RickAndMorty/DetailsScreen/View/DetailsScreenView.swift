@@ -12,6 +12,7 @@ class DetailsScreenView: BaseViewController {
     
     //MARK: - Properties
     
+    weak var coordinator: DetailsScreenCoordinator?
     private var viewModel: DetailsScreenViewModel
     private var cancelBag = Set<AnyCancellable>()
 
