@@ -25,6 +25,11 @@
 		E94A0D142AC5997B00A6AF9F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94A0D132AC5997B00A6AF9F /* Constants.swift */; };
 		E94B02F72A9261890097A463 /* DetailsTableViewSourceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94B02F62A9261890097A463 /* DetailsTableViewSourceManager.swift */; };
 		E94B02FA2A937B420097A463 /* MainCollectionViewFlowLayoutСonstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94B02F92A937B420097A463 /* MainCollectionViewFlowLayoutСonstants.swift */; };
+		E95DB07C2B35DE690036C718 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95DB07B2B35DE690036C718 /* Coordinator.swift */; };
+		E95DB07E2B35DF630036C718 /* BaseCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95DB07D2B35DF630036C718 /* BaseCoordinator.swift */; };
+		E95DB0802B35E0110036C718 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95DB07F2B35E0110036C718 /* AppCoordinator.swift */; };
+		E95DB0832B35E0F50036C718 /* MainScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95DB0822B35E0F50036C718 /* MainScreenCoordinator.swift */; };
+		E95DB0862B35E5FE0036C718 /* DetailsScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95DB0852B35E5FE0036C718 /* DetailsScreenCoordinator.swift */; };
 		E96E81272AB218700058F9DC /* CustomColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96E81232AB218700058F9DC /* CustomColor.swift */; };
 		E96E81282AB218700058F9DC /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96E81242AB218700058F9DC /* BaseViewController.swift */; };
 		E96E81292AB218700058F9DC /* GradientLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E96E81252AB218700058F9DC /* GradientLoader.swift */; };
@@ -59,6 +64,11 @@
 		E94A0D132AC5997B00A6AF9F /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		E94B02F62A9261890097A463 /* DetailsTableViewSourceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsTableViewSourceManager.swift; sourceTree = "<group>"; };
 		E94B02F92A937B420097A463 /* MainCollectionViewFlowLayoutСonstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MainCollectionViewFlowLayoutСonstants.swift"; sourceTree = "<group>"; };
+		E95DB07B2B35DE690036C718 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		E95DB07D2B35DF630036C718 /* BaseCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCoordinator.swift; sourceTree = "<group>"; };
+		E95DB07F2B35E0110036C718 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		E95DB0822B35E0F50036C718 /* MainScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreenCoordinator.swift; sourceTree = "<group>"; };
+		E95DB0852B35E5FE0036C718 /* DetailsScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsScreenCoordinator.swift; sourceTree = "<group>"; };
 		E96E81232AB218700058F9DC /* CustomColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomColor.swift; sourceTree = "<group>"; };
 		E96E81242AB218700058F9DC /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		E96E81252AB218700058F9DC /* GradientLoader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientLoader.swift; sourceTree = "<group>"; };
@@ -119,6 +129,32 @@
 			path = Manager;
 			sourceTree = "<group>";
 		};
+		E95DB07A2B35DE500036C718 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				E95DB07B2B35DE690036C718 /* Coordinator.swift */,
+				E95DB07D2B35DF630036C718 /* BaseCoordinator.swift */,
+				E95DB07F2B35E0110036C718 /* AppCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		E95DB0812B35E0E10036C718 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				E95DB0822B35E0F50036C718 /* MainScreenCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		E95DB0842B35E5E30036C718 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				E95DB0852B35E5FE0036C718 /* DetailsScreenCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
 		E96E81222AB218700058F9DC /* Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -175,6 +211,7 @@
 			isa = PBXGroup;
 			children = (
 				E9FFEC9E2A8E239C00ED532B /* AppDelegate.swift */,
+				E95DB07A2B35DE500036C718 /* Coordinator */,
 				E96E81222AB218700058F9DC /* Components */,
 			);
 			path = Basics;
@@ -193,6 +230,7 @@
 		E9FFECB42A8E3F3A00ED532B /* MainScreen */ = {
 			isa = PBXGroup;
 			children = (
+				E95DB0812B35E0E10036C718 /* Coordinator */,
 				E94B02F82A937B280097A463 /* Manager */,
 				E9FFECBD2A8E469100ED532B /* Model */,
 				E9FFECBC2A8E467F00ED532B /* View */,
@@ -204,6 +242,7 @@
 		E9FFECB52A8E3F5200ED532B /* DetailsScreen */ = {
 			isa = PBXGroup;
 			children = (
+				E95DB0842B35E5E30036C718 /* Coordinator */,
 				E94B02F52A9261780097A463 /* Manager */,
 				E9FFECC02A8E46AC00ED532B /* Model */,
 				E9FFECBF2A8E46A600ED532B /* View */,
@@ -341,7 +380,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				E94B02F72A9261890097A463 /* DetailsTableViewSourceManager.swift in Sources */,
+				E95DB0862B35E5FE0036C718 /* DetailsScreenCoordinator.swift in Sources */,
 				E94149AD2A8ED0CA00269B94 /* DetailsSectionHeader.swift in Sources */,
+				E95DB07C2B35DE690036C718 /* Coordinator.swift in Sources */,
 				E96E81372AB245CD0058F9DC /* CoreData.xcdatamodeld in Sources */,
 				E94149BD2A92397B00269B94 /* CharacterModel.swift in Sources */,
 				E96E81292AB218700058F9DC /* GradientLoader.swift in Sources */,
@@ -357,7 +398,9 @@
 				E96E81272AB218700058F9DC /* CustomColor.swift in Sources */,
 				E94B02FA2A937B420097A463 /* MainCollectionViewFlowLayoutСonstants.swift in Sources */,
 				E94149A72A8EB26700269B94 /* DetailsMainCell.swift in Sources */,
+				E95DB07E2B35DF630036C718 /* BaseCoordinator.swift in Sources */,
 				E94149BB2A92393B00269B94 /* EpisodeModel.swift in Sources */,
+				E95DB0802B35E0110036C718 /* AppCoordinator.swift in Sources */,
 				E94149BF2A92399300269B94 /* InfoModel.swift in Sources */,
 				E96E81282AB218700058F9DC /* BaseViewController.swift in Sources */,
 				E94149AB2A8EBC2C00269B94 /* DetailsEpisodeCell.swift in Sources */,
@@ -367,6 +410,7 @@
 				E9FFECB62A8E413A00ED532B /* AppDelegate.swift in Sources */,
 				E94149B32A9153BF00269B94 /* StringFormatter.swift in Sources */,
 				E9FFECC52A8E505700ED532B /* MainScreenViewModel.swift in Sources */,
+				E95DB0832B35E0F50036C718 /* MainScreenCoordinator.swift in Sources */,
 				E94149AF2A8F896800269B94 /* DetailsInfoCell.swift in Sources */,
 				E9FFECC32A8E504100ED532B /* MainScreenView.swift in Sources */,
 			);
