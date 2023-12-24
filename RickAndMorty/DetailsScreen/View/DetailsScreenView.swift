@@ -114,7 +114,8 @@ class DetailsScreenView: BaseViewController {
     }
     
     private func showErrorAlert(with errorCode: Int) {
-        let alert = UIAlertController(title: "Error", message: "Error code: \(errorCode)", preferredStyle: .alert)
+        guard errorCode == -1009 else { return } //To show alert only when there is no internet connection
+        let alert = UIAlertController(title: "Error", message: "Check your internet connection", preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "Ok", style: .cancel)
         alert.addAction(cancelAction)
         
